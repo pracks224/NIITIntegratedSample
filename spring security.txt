@@ -1,0 +1,291 @@
+git init
+
+git add -A
+
+git commit -m "Add all files"
+
+git remote add github https://github.com/pracks224/NiitShoppingCart.git
+
+git push -f github master
+
+==================================
+
+
+Security Implementation
+========================
+
+- Any web Application requires security implementation as it is a public resource and any malicious activity can be implemented.
+
+- Spring Security provides various built in process by which we can secure our web application.
+
+- Whenever we specify any security there are two terms which we come across.
+
+1. Authentication:
+
+	- It is a process where specify whether the user is valid for the application?
+
+	- We can implement this by using various ways
+
+	1. Username and Password
+
+	2. Biometric
+
+	3. Smart Card
+
+2. Authorization :
+
+	- It is the permission for accessing a particular resource.
+
+	- Here we divide the Modules 
+
+	- As per our application there are two authorization will be there
+
+	1. Admin - ProductCRUD , CategoryCRUD , Supplier CRUD
+
+	2. User  - AddToCart , OrderSubmission , Payment
+
+	- Depending on the Role we specify the different authorization.
+
+
+Role :  A role is a group user where a certain level of permissions are specified.
+
+
+Filter : Filter is just like a servlet which will takes cares about the various functionality
+
+1. Filtering Request
+
+2. Authentication & Authorization
+
+3. Compression
+
+Implementing the Spring Security
+==============================
+
+Step 1: Add the following dependencies to implement Spring Security.
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+
+Step 2: Add the Spring Filter information in web.xml file.
+
+ <filter>
+	<filter-name>springSecurityFilterChain</filter-name>
+	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+<filter-mapping>
+	<filter-name>springSecurityFilterChain</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+
+
+Step 3 : Create a SpringSecurityImpl.xml file 
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security.xsd">
+
+<security:http auto-config="true" use-expressions="true">
+
+<security:form-login login-page="/login" default-target-url="/" 
+	 login-processing-url="/perform_login" authentication-failure-url="/login"
+	authentication-success-forward-url="/login_success" />
+
+<security:csrf disabled="true" />
+
+</security:http>
+
+<security:authentication-manager>
+<security:authentication-provider>
+	<security:jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select username,password,enabled from UserDetail where username=?"
+				authorities-by-username-query="select username, role from UserDetail where username =?" />
+</security:authentication-provider>
+</security:authentication-manager>
+
+
+</beans:beans>
+
+
+Step 4: Add the xml file information in web.xml file.
+
+<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/dispatcher-servlet.xml,/WEB-INF/SecurityImpl.xml</param-value>
+  </context-param>
+
+
+Step 5: Create a LoginForm whose action should be perform_login.
+
+<%@ page language="java" contentType="text/html"%>
+
+<%@include file="Header.jsp" %>
+
+	<form action="perform_login" method="post">
+		<table align="right">
+			<thead bgcolor="pink">
+				<th colspan="2">Login</th>
+			</thead>
+			<tr bgcolor="gray">
+				<td>User Name</td>
+				<td><input type="text" name="username" required /></td>
+			</tr>
+			<tr bgcolor="gray">
+				<td>Password</td>
+				<td><input type="password" name="password" required /></td>
+			</tr>
+			</tr>
+			<tr bgcolor="pink">
+				<td colspan="2"><center>
+						<input type="submit" value="SUBMIT" />
+					</center></td>
+			</tr>
+		</table>
+	</form>
+
+
+</body>
+</html>
+
+
+Step 6 : Create the authentication-success-forward-url in the Controller
+
+package com.mobitel.MobitelFrontend.controller;
+
+import java.util.Collection;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mobitel.MobitelBackend.dao.ProductDAO;
+import com.mobitel.MobitelBackend.model.Product;
+
+@Controller
+public class UserController 
+{
+	@Autowired
+	ProductDAO productDAO;
+	
+	@RequestMapping("/login_success")
+	public String loginSuccess(HttpSession session,Model m)
+	{
+		System.out.println("--Login Successful---");
+		
+		String page=null;
+		
+		boolean loggedIn=true;
+		
+		//Retrieving the username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		session.setAttribute("username",username);
+		session.setAttribute("loggedIn",loggedIn);
+		
+		//Retrieving the Role
+		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		
+		for(GrantedAuthority role:authorities)
+		{
+			System.out.println("---Role:"+role.getAuthority()+" User Name:"+username+"----");
+			if(role.getAuthority().equals("ROLE_ADMIN"))
+			{
+				page="AdminHome";
+			}
+			else
+			{
+				List<Product> prodlist=productDAO.getProductDetails();
+				m.addAttribute("prodlist",prodlist);
+				
+				page="UserHome";
+			}
+		}
+		
+		return page;
+	}
+	
+}
+
+
+
+
+Table Creation
+=================
+Create table UserDetail
+(
+username varchar(20),
+password varchar(15),
+role varchar(15),
+enabled boolean,
+customername varchar(30),
+Addr varchar(40)
+)
+
+
+SELECT * FROM USERDETAIL 
+
+insert into userdetail values('Rohan','12345','ROLE_ADMIN',true,'Rohan Kumar','Mumbai')
+
+<listener>
+
+  <listener-class>org.springframework.security.web.session
+
+    .HttpSessionEventPublisher</listener-class>
+</listener>
+
+
+<http>
+
+  <session-management>
+    <concurrency-control
+       max-sessions="1"
+       expired-url="/your-page-here" />
+  </session-management>
+</http>
+
+
+
+
+
+
+
+
+
+
+
