@@ -19,7 +19,6 @@
 
 		 <form-login login-processing-url="/j_spring_security_check" login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error" 
 			username-parameter="username" password-parameter="password" /> 
-		<!-- <form-login /> -->
 		<logout logout-url="/j_spring_security_logout" logout-success-url="/login?logout" />
 		<!-- enable csrf protection -->
 		<csrf />
@@ -33,15 +32,4 @@
             />
         </authentication-provider>
 	</authentication-manager>
-	
-	<!-- <authentication-manager>
-	  <authentication-provider>
-		<jdbc-user-service data-source-ref="myDataSource"
-		  users-by-username-query=
-		    "select username,password, enabled from users where username=?"
-		  authorities-by-username-query=
-		    "select username, role from user_roles where username =?  " />
-	  </authentication-provider>
-	</authentication-manager> -->
-
 </beans:beans>

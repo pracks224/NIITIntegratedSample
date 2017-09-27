@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.niit</groupId>
-	<artifactId>spring-security-loginform-xml</artifactId>
+	<artifactId>NiitEComApp</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>NIIT ECom App</name>
@@ -95,7 +95,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>SpringSecurityHelloWorld</finalName>
+		<finalName>NiitEComApp</finalName>
 		<plugins>
 
 			<plugin>
@@ -111,7 +111,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<webXml>Q:\Prakash\NiiT_security\NIITEComWeb\WebContent\WEB-INF\web.xml</webXml>
+					<webXml>D:\Training\NIIT\NiiT_security\NIITIntegratedSample\NIITEComWeb\WebContent\WEB-INF\web.xml</webXml>
 				</configuration>
 			</plugin>
 		</plugins>
