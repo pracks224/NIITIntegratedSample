@@ -10,16 +10,14 @@
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<http auto-config="true">
-		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+	<http auto-config="true" >
+		<!-- <intercept-url pattern="/index**" access="hasRole('ROLE_ADMIN')" /> -->
 		
-		<!-- <session-management>
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false"/>                   
-        </session-management> -->
-
+		<intercept-url pattern="/index**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
+		
 		 <form-login login-processing-url="/j_spring_security_check" login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error" 
 			username-parameter="username" password-parameter="password" /> 
-		<logout logout-url="/j_spring_security_logout" logout-success-url="/login?logout" />
+		<logout logout-success-url="/login?logout" />
 		<!-- enable csrf protection -->
 		<csrf />
 	</http>

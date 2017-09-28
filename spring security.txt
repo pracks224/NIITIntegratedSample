@@ -9,7 +9,14 @@ git remote add github https://github.com/pracks224/NiitShoppingCart.git
 git push -f github master
 
 ==================================
+1.git init
+2.git config user.name "someone"
+3.git config user.email "someone@someplace.com"
+4.git add *
+5.git commit -m "front end pom modified"
+6.git push
 
+================================
 
 Security Implementation
 ========================

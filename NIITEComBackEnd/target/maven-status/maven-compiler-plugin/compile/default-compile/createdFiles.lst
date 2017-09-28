@@ -1,4 +1,7 @@
-com\niit2\backend\NIITEComBackEnd\config\ApplicationContextConfig.class
 com\niit2\backend\NIITEComBackEnd\Dao\UserDaoImpl.class
+com\niit2\backend\NIITEComBackEnd\Dao\ProductDao.class
+com\niit2\backend\NIITEComBackEnd\model\Product.class
+com\niit2\backend\NIITEComBackEnd\Dao\ProductDaoImpl.class
+com\niit2\backend\NIITEComBackEnd\config\ApplicationContextConfig.class
 com\niit2\backend\NIITEComBackEnd\model\User.class
 com\niit2\backend\NIITEComBackEnd\Dao\UserDao.class
