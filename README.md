@@ -23,3 +23,6 @@ Next
   IMAGE       BLOB,
   CREATE_DATE DATE default sysdate not null
 ) ;
+
+alter table ITEM
+  add primary key (ID) ;
