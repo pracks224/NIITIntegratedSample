@@ -9,6 +9,8 @@ git remote add github https://github.com/pracks224/NiitShoppingCart.git
 git push -f github master
 
 ==================================
+git clone <url> then follow the below steps:
+
 1.git init
 2.git config user.name "someone"
 3.git config user.email "someone@someplace.com"
