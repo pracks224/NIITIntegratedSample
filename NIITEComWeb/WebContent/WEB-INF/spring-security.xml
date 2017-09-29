@@ -15,9 +15,9 @@
 		
 		<intercept-url pattern="/index**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
 		
-		 <form-login login-processing-url="/j_spring_security_check" login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error" 
+		 <form-login login-processing-url="/j_spring_security_check" login-page="/login" default-target-url="/index1" authentication-failure-url="/login?error" 
 			username-parameter="username" password-parameter="password" /> 
-		<logout logout-success-url="/login?logout" />
+		<logout  logout-success-url="/login?logout" />
 		<!-- enable csrf protection -->
 		<csrf />
 	</http>

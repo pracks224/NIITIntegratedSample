@@ -70,7 +70,7 @@
 							document.getElementById("logoutForm").submit();
 						}
 					</script>
-					<li><a href="<c:url value="/j_spring_security_logout" />"><span
+					<li><a href="<c:url value="/login?logout" />"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</c:if>
 			</ul>
